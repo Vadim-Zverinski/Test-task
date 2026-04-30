@@ -1,6 +1,5 @@
 package com.example.demo.filter;
 
-
 import com.example.demo.repository.entity.Hotel;
 import org.springframework.data.jpa.domain.Specification;
 
