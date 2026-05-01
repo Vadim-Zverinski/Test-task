@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface HotelRepository extends
         JpaRepository<Hotel,Long>,
         JpaSpecificationExecutor<Hotel>{
+
+    boolean existsByNameAndAddress_City(String name, String city);
 }

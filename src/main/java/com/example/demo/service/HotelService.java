@@ -7,6 +7,9 @@ import com.example.demo.dto.hotelResponseDto.HotelShortResponse;
 import com.example.demo.filter.HotelSpecification;
 import com.example.demo.repository.api.HotelRepository;
 import com.example.demo.repository.entity.Hotel;
+import com.example.demo.service.Util.HotelNormalizer;
+import com.example.demo.service.Util.HotelPolicy;
+import com.example.demo.service.Util.HotelValidator;
 import com.example.demo.service.api.IHotelService;
 import com.example.demo.service.mapper.HotelMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,9 @@ public class HotelService implements IHotelService {
 
     private final HotelRepository hotelRepository;
     private final HotelMapper mapper;
+    private final HotelValidator validator;
+    private final HotelPolicy policy;
+    private final HotelNormalizer normalizer;
 
     @Override
     public List<HotelShortResponse> getAllHotels() {
@@ -37,8 +43,11 @@ public class HotelService implements IHotelService {
         return mapper.toFullDto(hotel);
     }
 
-    @Override
     public HotelFullResponse createHotel(CreateHotelRequest request) {
+
+        validator.validate(request);
+        policy.checkCreateAllowed(request);
+        normalizer.normalize(request);
         Hotel hotel = mapper.toEntity(request);
         Hotel saved = hotelRepository.save(hotel);
         return mapper.toFullDto(saved);
@@ -53,6 +62,7 @@ public class HotelService implements IHotelService {
                 .and(HotelSpecification.hasCity(city))
                 .and(HotelSpecification.hasCountry(country))
                 .and(HotelSpecification.hasAmenity(amenity));
+
         return hotelRepository.findAll(spec)
                 .stream()
                 .map(mapper::toShortDto)
