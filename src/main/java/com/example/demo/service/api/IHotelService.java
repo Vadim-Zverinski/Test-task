@@ -1,13 +1,15 @@
 package com.example.demo.service.api;
 
-import com.example.demo.repository.entity.Hotel;
+import com.example.demo.dto.hotelRequestDto.CreateHotelRequest;
+import com.example.demo.dto.hotelResponseDto.HotelFullResponse;
+import com.example.demo.dto.hotelResponseDto.HotelShortResponse;
 
 import java.util.List;
 
 public interface IHotelService {
 
-    List<Hotel> getAllHotels();
-    Hotel getHotelById(Long id);
-    Hotel createHotel(Hotel hotel);
-    List<Hotel> search(String name, String brand, String city, String country, String amenity);
+    List<HotelShortResponse> getAllHotels();
+    HotelFullResponse getHotelById(Long id);
+    HotelFullResponse createHotel(CreateHotelRequest request);
+    List<HotelShortResponse> search(String name, String brand, String city, String country, String amenity);
 }

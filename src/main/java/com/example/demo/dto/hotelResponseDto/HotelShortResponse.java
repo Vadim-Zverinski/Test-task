@@ -1,5 +1,6 @@
 package com.example.demo.dto.hotelResponseDto;
 
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 
