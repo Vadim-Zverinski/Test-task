@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.dto.hotelRequestDto.CreateHotelRequest;
 import com.example.demo.dto.hotelResponseDto.HotelFullResponse;
@@ -16,10 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -86,5 +86,42 @@ public class HotelService implements IHotelService {
         hotel.setAmenities(new ArrayList<>(uniqueAmenities));
         Hotel saved = hotelRepository.save(hotel);
         return mapper.toFullDto(saved);
+    }
+
+    @Override
+    public Map<String, Long> getHistogram(String param) {
+
+        List<Hotel> hotels = hotelRepository.findAll();
+        return switch (param.toLowerCase()) {
+
+            case "brand" -> hotels.stream()
+                    .collect(Collectors.groupingBy(
+                            Hotel::getBrand,
+                            Collectors.counting()
+                    ));
+
+            case "city" -> hotels.stream()
+                    .collect(Collectors.groupingBy(
+                            h -> h.getAddress().getCity(),
+                            Collectors.counting()
+                    ));
+
+            case "country" -> hotels.stream()
+                    .collect(Collectors.groupingBy(
+                            h -> h.getAddress().getCountry(),
+                            Collectors.counting()
+                    ));
+
+            case "amenities" -> hotels.stream()
+                    .flatMap(h -> h.getAmenities() == null
+                            ? Stream.empty()
+                            : h.getAmenities().stream())
+                    .collect(Collectors.groupingBy(
+                            a -> a,
+                            Collectors.counting()
+                    ));
+
+            default -> throw new BadRequestException("Unknown histogram param: " + param);
+        };
     }
 }

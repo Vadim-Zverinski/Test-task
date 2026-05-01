@@ -5,6 +5,7 @@ import com.example.demo.dto.hotelResponseDto.HotelFullResponse;
 import com.example.demo.dto.hotelResponseDto.HotelShortResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IHotelService {
 
@@ -13,4 +14,5 @@ public interface IHotelService {
     HotelFullResponse createHotel(CreateHotelRequest request);
     List<HotelShortResponse> search(String name, String brand, String city, String country, String amenity);
     HotelFullResponse addAmenities(Long id, List<String> amenities);
+    Map<String, Long> getHistogram(String param);
 }
