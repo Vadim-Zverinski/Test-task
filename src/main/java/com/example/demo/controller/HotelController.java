@@ -43,4 +43,12 @@ public class HotelController {
     ) {
         return service.search(name, brand, city, country, amenities);
     }
+
+    @PostMapping("/hotels/{id}/amenities")
+    public HotelFullResponse addAmenities(
+            @PathVariable Long id,
+            @RequestBody List<String> amenities
+    ) {
+        return service.addAmenities(id, amenities);
+    }
 }

@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +70,21 @@ public class HotelService implements IHotelService {
                 .stream()
                 .map(mapper::toShortDto)
                 .toList();
+    }
+
+    @Override
+    public HotelFullResponse addAmenities(Long id, List<String> amenities) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Hotel not found " + id));
+
+        if (hotel.getAmenities() == null) {
+            hotel.setAmenities(new ArrayList<>());
+        }
+
+        Set<String> uniqueAmenities = new HashSet<>(hotel.getAmenities());
+        uniqueAmenities.addAll(amenities);
+        hotel.setAmenities(new ArrayList<>(uniqueAmenities));
+        Hotel saved = hotelRepository.save(hotel);
+        return mapper.toFullDto(saved);
     }
 }

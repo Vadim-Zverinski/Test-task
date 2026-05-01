@@ -12,4 +12,5 @@ public interface IHotelService {
     HotelFullResponse getHotelById(Long id);
     HotelFullResponse createHotel(CreateHotelRequest request);
     List<HotelShortResponse> search(String name, String brand, String city, String country, String amenity);
+    HotelFullResponse addAmenities(Long id, List<String> amenities);
 }
