@@ -4,6 +4,7 @@ import com.example.demo.filter.HotelSpecification;
 import com.example.demo.repository.api.HotelRepository;
 import com.example.demo.repository.entity.Hotel;
 import com.example.demo.service.api.IHotelService;
+import com.example.demo.service.mapper.HotelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 public class HotelService implements IHotelService {
 
     private final HotelRepository hotelRepository;
+    private final HotelMapper mapper;
 
     @Override
     public List<Hotel> getAllHotels() {
