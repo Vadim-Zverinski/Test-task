@@ -48,11 +48,9 @@ class HotelServiceTest {
 
         Hotel hotel = new Hotel();
         when(hotelRepository.findAll()).thenReturn(List.of(hotel));
-
-        when(mapper.toShortDto(any())).thenReturn(null);
-
+        when(mapper.toShortDto(any()))
+                .thenReturn(HotelShortResponse.builder().build());
         var result = service.getAllHotels();
-
         assertThat(result).isNotNull();
         verify(hotelRepository).findAll();
     }
@@ -85,22 +83,59 @@ class HotelServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @Test
-    void createHotel_shouldSaveHotel() {
-        var request = CreateHotelRequest.builder()
-                .name("Hilton")
-                .build();
-        var hotel = new Hotel();
-        var saved = new Hotel();
+//    @Test
+//    void createHotel_shouldSaveHotel() {
+//        var request = CreateHotelRequest.builder()
+//                .name("Hilton")
+//                .build();
+//        var hotel = new Hotel();
+//        var saved = new Hotel();
+//
+//        when(mapper.toEntity(any())).thenReturn(hotel);
+//        when(hotelRepository.save(hotel)).thenReturn(saved);
+//        when(mapper.toFullDto(any()))
+//                .thenReturn(
+//                        HotelFullResponse.builder()
+//                                .id(1L)
+//                                .name("Hilton")
+//                                .build()
+//                );
+//
+//        var result = service.createHotel(request);
+//
+//        assertThat(result.getId()).isEqualTo(1L);
+//        assertThat(result.getName()).isEqualTo("Hilton");
+//        verify(hotelRepository).save(hotel);
+//    }
+@Test
+void createHotel_shouldSaveHotel() {
 
-        when(mapper.toEntity(request)).thenReturn(hotel);
-        when(hotelRepository.save(hotel)).thenReturn(saved);
-        when(mapper.toFullDto(any()))
-                .thenReturn(HotelFullResponse.builder().build());
+    var request = CreateHotelRequest.builder()
+            .name("Hilton")
+            .build();
 
-        var result = service.createHotel(request);
+    var hotel = new Hotel();
+    var saved = new Hotel();
 
-        assertThat(result).isNotNull();
-        verify(hotelRepository).save(hotel);
-    }
+    var response = HotelShortResponse.builder()
+            .id(1L)
+            .name("Hilton")
+            .build();
+
+    when(mapper.toEntity(any(CreateHotelRequest.class)))
+            .thenReturn(hotel);
+
+    when(hotelRepository.save(any(Hotel.class)))
+            .thenReturn(saved);
+
+    when(mapper.toShortDto(saved))
+            .thenReturn(response);
+
+    var result = service.createHotel(request);
+
+    assertThat(result).isNotNull();
+    assertThat(result.getId()).isEqualTo(1L);
+
+    verify(hotelRepository).save(hotel);
+}
 }
