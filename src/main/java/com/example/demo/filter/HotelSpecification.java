@@ -33,7 +33,7 @@ public class HotelSpecification {
         return (root, query, cb) -> {
             if (amenity == null) return null;
 
-            return cb.isMember(amenity, root.get("amenities"));
+            return cb.isMember(amenity.toLowerCase().trim(), root.get("amenities"));
         };
     }
 }

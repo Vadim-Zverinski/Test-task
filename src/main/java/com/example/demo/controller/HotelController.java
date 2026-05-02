@@ -22,26 +22,26 @@ public class HotelController {
 
     private final HotelService service;
 
-    @Operation(summary = "Get all hotels")
     @GetMapping("/hotels")
+    @Operation(summary = "Get all hotels")
     public List<HotelShortResponse> getAllHotels() {
         return service.getAllHotels();
     }
 
-    @Operation(summary = "Get hotels by id")
     @GetMapping("/hotels/{id}")
+    @Operation(summary = "Get hotel by id")
     public HotelFullResponse getHotelById(@PathVariable Long id) {
         return service.getHotelById(id);
     }
 
-    @Operation(summary = "Set hotels")
     @PostMapping("/hotels")
-    public HotelFullResponse createHotel(@Valid @RequestBody CreateHotelRequest request) {
+    @Operation(summary = "Create hotels")
+    public HotelShortResponse createHotel(@RequestBody CreateHotelRequest request) {
         return service.createHotel(request);
     }
 
-    @Operation(summary = "Search")
     @GetMapping("/search")
+    @Operation(summary = "Search")
     public List<HotelShortResponse> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
@@ -52,8 +52,8 @@ public class HotelController {
         return service.search(name, brand, city, country, amenities);
     }
 
-    @Operation(summary = "Set amenities")
     @PostMapping("/hotels/{id}/amenities")
+    @Operation(summary = "Add amenities")
     public HotelFullResponse addAmenities(
             @PathVariable Long id,
             @RequestBody List<String> amenities
@@ -61,8 +61,8 @@ public class HotelController {
         return service.addAmenities(id, amenities);
     }
 
-    @Operation(summary = "Group by")
     @GetMapping("/histogram/{param}")
+    @Operation(summary = "Group by")
     public Map<String, Long> histogram(@PathVariable String param) {
         return service.getHistogram(param);
     }

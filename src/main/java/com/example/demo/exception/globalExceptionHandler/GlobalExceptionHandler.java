@@ -27,4 +27,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(409).body(ex.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleOther(Exception ex) {
+        return ResponseEntity.status(500).body("Internal error");
+    }
 }

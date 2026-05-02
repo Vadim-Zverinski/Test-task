@@ -46,14 +46,14 @@ public class HotelService implements IHotelService {
         return mapper.toFullDto(hotel);
     }
 
-    public HotelFullResponse createHotel(CreateHotelRequest request) {
+    public HotelShortResponse createHotel(CreateHotelRequest request) {
 
         validator.validate(request);
         policy.checkCreateAllowed(request);
         normalizer.normalize(request);
         Hotel hotel = mapper.toEntity(request);
         Hotel saved = hotelRepository.save(hotel);
-        return mapper.toFullDto(saved);
+        return mapper.toShortDto(saved);
     }
 
     @Override
@@ -102,13 +102,13 @@ public class HotelService implements IHotelService {
 
             case "city" -> hotels.stream()
                     .collect(Collectors.groupingBy(
-                            h -> h.getAddress().getCity(),
+                            h -> h.getAddress() != null ? h.getAddress().getCity(): "unknown",
                             Collectors.counting()
                     ));
 
             case "country" -> hotels.stream()
                     .collect(Collectors.groupingBy(
-                            h -> h.getAddress().getCountry(),
+                            h -> h.getAddress() != null ? h.getAddress().getCountry(): "unknown",
                             Collectors.counting()
                     ));
 

@@ -46,11 +46,9 @@ public class HotelServiceIntegrationTest {
                         .build())
                 .build();
 
-        HotelFullResponse response = hotelService.createHotel(request);
-
+        HotelShortResponse response = hotelService.createHotel(request);
         assertNotNull(response.getId());
         assertEquals("Hilton", response.getName());
-
         assertEquals(1, hotelRepository.count());
     }
 

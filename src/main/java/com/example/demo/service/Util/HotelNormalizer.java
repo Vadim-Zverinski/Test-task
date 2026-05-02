@@ -15,8 +15,10 @@ public class HotelNormalizer implements IHotelNormalizer {
             request.setBrand(request.getBrand().trim());
         }
 
-        request.getAddress().setCity(
-                request.getAddress().getCity().trim().toLowerCase()
-        );
+        if (request.getAddress() != null && request.getAddress().getCity() != null) {
+            request.getAddress().setCity(
+                    request.getAddress().getCity().trim().toLowerCase()
+            );
+        }
     }
 }
