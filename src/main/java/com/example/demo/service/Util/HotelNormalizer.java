@@ -17,7 +17,7 @@ public class HotelNormalizer implements IHotelNormalizer {
 
         if (request.getAddress() != null && request.getAddress().getCity() != null) {
             request.getAddress().setCity(
-                    request.getAddress().getCity().trim().toLowerCase()
+                    request.getAddress().getCity().trim()
             );
         }
     }
